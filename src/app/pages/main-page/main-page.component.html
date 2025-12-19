@@ -1,0 +1,72 @@
+<div class="min-h-screen bg-gray-100 overflow-x-hidden">
+  <app-header 
+    [isScrolled]="isScrolled()" 
+    [activeSection]="activeSection()"
+    (bookCall)="openCalendlyModal()" />
+
+  <main>
+    <app-hero (bookCall)="openCalendlyModal()" />
+    <app-social-proof />
+    <app-testimonials [testimonials]="testimonials()"></app-testimonials>
+    <app-problem />
+    <app-why-us />
+    <app-services [services]="services()" (serviceClick)="openServiceModal($event)" />
+    <app-pricing [pricingPackages]="pricingPackages()" (bookCall)="openCalendlyModal()" />
+    <app-faq [(faqs)]="faqs" />
+    <app-blog [blogPosts]="blogPosts()" (postClick)="openBlogPostModal($event)" />
+    <app-contact />
+  </main>
+
+  <app-footer [socials]="socials()" />
+
+  <!-- Service Detail Modal -->
+  @if (selectedService(); as service) {
+  <div class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center animate-fade-in" (click)="closeServiceModal()">
+      <div class="bg-white/60 backdrop-blur-xl border border-white/30 rounded-2xl shadow-2xl w-full max-w-2xl mx-4 animate-scale-in" (click)="$event.stopPropagation()">
+          <div class="p-8">
+              <div class="flex justify-between items-start">
+                  <div>
+                      <h3 class="text-2xl font-bold text-gray-900">{{ service.title }}</h3>
+                  </div>
+                  <button (click)="closeServiceModal()" class="text-gray-400 hover:text-gray-600">
+                      <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                  </button>
+              </div>
+              <p class="mt-4 text-gray-600">{{ service.detailedDescription }}</p>
+          </div>
+          <div class="bg-gray-50/60 p-6 flex justify-end rounded-b-2xl">
+              <button (click)="openCalendlyModal(); closeServiceModal();" class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-6 rounded-lg transition-transform hover:scale-105">
+                  Book a Call
+              </button>
+          </div>
+      </div>
+  </div>
+  }
+
+  <!-- Blog Post Modal -->
+  @if (selectedBlogPost(); as post) {
+  <div class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 animate-fade-in" (click)="closeBlogPostModal()">
+      <div class="bg-white rounded-2xl shadow-2xl w-full max-w-3xl mx-auto max-h-[90vh] flex flex-col animate-scale-in" (click)="$event.stopPropagation()">
+          <div class="p-6 border-b border-gray-200 flex justify-between items-center flex-shrink-0">
+              <h2 class="text-2xl font-bold text-gray-900">{{ post.title }}</h2>
+              <button (click)="closeBlogPostModal()" aria-label="Close dialog" class="text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500 rounded-md">
+                  <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+              </button>
+          </div>
+          <div class="p-6 md:p-8 overflow-y-auto">
+              <p class="text-sm text-gray-500 mb-6 font-medium">By {{ post.authorName }}</p>
+              <div class="text-gray-700 leading-relaxed space-y-4" [innerHTML]="sanitizeHtml(post.fullContent)"></div>
+          </div>
+          <div class="bg-gray-50 p-6 mt-auto rounded-b-2xl text-center flex-shrink-0">
+              <p class="text-lg font-semibold text-gray-800">Ready to build a brand that converts?</p>
+              <p class="text-gray-600 mt-1 mb-4">Let's turn your expertise into authority.</p>
+              <button (click)="openCalendlyModal(); closeBlogPostModal();" class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-8 rounded-lg transition-transform hover:scale-105">
+                  Book a Free Strategy Call
+              </button>
+          </div>
+      </div>
+  </div>
+  }
+
+  <app-whatsapp-widget />
+</div>
